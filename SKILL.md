@@ -18,12 +18,23 @@ A catalog of wallet CLIs that can sign **x402** (HTTP 402) or **MPP** (Multi-Pro
 
 ## How to use
 
-1. Run the probe below to see which wallet CLIs are installed/authed and what USDC balance exists.
-2. Match the chain you need (from the paid endpoint's `accepts[].network`) against the wallet's `Protocols & chains` section.
-3. Fetch the chosen wallet's doc for its exact transport command.
-4. Wrap your own JSON / form body in the transport pattern.
+This is a fetchable skill — an LLM coding agent (Claude Code, Codex, Cursor, etc.) reads SKILL.md once and reuses it across any paid HTTP endpoint. The flow per call:
 
-If none of the catalog wallets are present, the agent decides whether to install one. Each per-wallet doc carries a one-line `## Install` hint with the canonical package + docs link.
+**1. Detect wallets on the machine.** Run the `detect_wallets` probe in the next section. It reports which of the 10 wallet CLIs are installed, authenticated, and what USDC balance exists per chain.
+
+**2. Match the chain.** The paid endpoint's 402 response lists accepted chains in `accepts[].network`. Find a wallet in the catalog whose `Protocols & chains` intersects that set, and whose USDC balance covers `amount + fee`.
+
+**3. Fetch the chosen wallet's transport doc.**
+
+```bash
+curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
+```
+
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`. Each doc gives the exact CLI invocation pattern for that wallet's x402 or MPP transport.
+
+**4. Combine wallet transport + endpoint payload.** The wallet doc tells you *how to send* (signing, headers, options). The paid endpoint's own spec tells you *what to send* (URL, request body, fee structure for any per-call payment cap). The [worked example](#worked-example--calling-a-paid-endpoint-via-purl) below shows the pattern with moltycash as the endpoint.
+
+If no catalog wallet is present on the machine, every per-wallet doc carries a one-line `## Install` hint with the canonical package + docs link — so the agent can offer the user a short menu of install options instead of guessing.
 
 ## Quick detection probe
 
