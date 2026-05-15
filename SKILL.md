@@ -13,8 +13,8 @@ A catalog of wallet CLIs that can sign **x402** (HTTP 402) or **MPP** (Multi-Pro
 
 ## Protocols & chains supported by the catalog
 
-- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`), World Chain (`eip155:480`), SKALE Base (`eip155:1187947933`)
-- **MPP**: Tempo (`eip155:4217`), Stellar (`stellar:pubnet`), Monad (`eip155:143`)
+- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`)
+- **MPP**: Tempo (`eip155:4217`)
 
 ## How to use
 
