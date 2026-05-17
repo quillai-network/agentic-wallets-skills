@@ -1,16 +1,104 @@
 # agentic-wallets-skills
 
-Generic [x402](https://x402.org) + MPP (Multi-Provider Payments) wallet skill for AI agents.
+A **template skill** for x402 / MPP paid-endpoint developers. Reference this catalog from your own endpoint spec so AI agents calling your service can pay you with any of 10 installed wallet CLIs — no per-endpoint integration of 10 different wallet SDKs required.
 
-A catalog of 10 wallet CLIs that can sign paid HTTP requests, with detection probes (auth + USDC balance) and per-chain transport patterns. The skill assumes a wallet is already installed and authed; if none are present, the AI agent decides which to install.
+The skill is **wallet-side only**. It tells an AI agent how to detect, pick, and invoke any of the 10 supported wallet CLIs. Your endpoint-side spec — URLs, request bodies, fees, cap math — lives in your own skill file.
 
-## Entry point
+## How it works
 
-Point any agent at [`SKILL.md`](./SKILL.md). It contains:
+The pattern is two skills in tandem:
 
-- Detection probe for all 10 wallet CLIs (auth + USDC balance commands)
-- Wallet catalog with `Protocols & chains`, install hints, and per-wallet doc links
-- A worked example using [molty.cash](https://molty.cash) (a public x402 + MPP endpoint) for copy-pasteable testing
+1. **Your endpoint skill** — what your service is, the URLs, request/response shape, fee schedule, anything vendor-specific
+2. **This catalog** (`agentic-wallets/SKILL.md`) — how to drive any of the 10 wallet CLIs
+
+An AI agent reading your endpoint spec follows the link to this catalog, picks a wallet with the human's input, and combines both to make the paid request.
+
+## Hosted skill (canonical)
+
+```
+https://molty.cash/skills/agentic-wallets/SKILL.md
+```
+
+Per-wallet docs live at:
+
+```
+https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
+```
+
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`.
+
+## For endpoint developers — how to integrate
+
+In your endpoint's own SKILL.md (or PAYMENT.md, or whatever you call your agent-facing payment spec), reference this catalog. Example:
+
+```markdown
+## Wallet selection
+
+This endpoint accepts payment via x402 on Base and Solana, and MPP on Tempo.
+
+To make a payment, follow the agentic-wallets catalog:
+  https://molty.cash/skills/agentic-wallets/SKILL.md
+
+Pick any wallet whose `Protocols & chains` intersects the chains this
+endpoint accepts. Then fetch the wallet's doc:
+  https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
+
+Combine the wallet's transport pattern with this endpoint's URL + body
++ fee structure (below).
+```
+
+That's it. Your endpoint spec stays focused on what's unique to your service. The wallet-side complexity (10 different CLIs × x402 vs MPP × multiple chains) is delegated to this catalog.
+
+### Reference example
+
+[moltycash PAYMENT.md](https://molty.cash/skills/PAYMENT.md) is a real-world endpoint-side spec for `api.molty.cash` (tip / hire / gig). Read it to see the pattern in action — it links to this catalog for the wallet side, then documents only what's specific to moltycash (endpoints, JSON-RPC payloads, fees).
+
+The pattern is repeatable for any paid HTTP endpoint.
+
+## Self-hosting
+
+If you want to host a copy of this catalog at your own domain (so the link in your endpoint spec is on your own infrastructure), clone this repo and serve the contents under `<your-host>/agentic-wallets/`. Update the per-wallet `curl` examples in your fork to use your host.
+
+```bash
+git clone https://github.com/moltycash/agentic-wallets-skills.git
+```
+
+## For AI agents — how to use the skill at runtime
+
+If you're an agent (Claude Code, Codex, Cursor, etc.) and you've been told to make a paid HTTP call, the agent-facing instructions are inside [`SKILL.md`](./SKILL.md) — fetch and read that, not this README.
+
+Canonical hosted entry point:
+
+```bash
+curl https://molty.cash/skills/agentic-wallets/SKILL.md
+```
+
+## Install / consume the skill
+
+This is an [agentskills.io](https://agentskills.io/specification)-style skill — a folder with `SKILL.md` at the root. Three common ways to consume it:
+
+### 1. Direct fetch (zero install)
+
+```bash
+curl https://molty.cash/skills/agentic-wallets/SKILL.md
+curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
+```
+
+### 2. Claude Code skill
+
+```bash
+git clone https://github.com/moltycash/agentic-wallets-skills.git \
+  ~/.claude/skills/agentic-wallets
+```
+
+Claude Code picks up `SKILL.md` automatically.
+
+### 3. Git submodule
+
+```bash
+git submodule add https://github.com/moltycash/agentic-wallets-skills.git skills/agentic-wallets
+git submodule update --init
+```
 
 ## Wallets covered
 
@@ -27,56 +115,9 @@ Point any agent at [`SKILL.md`](./SKILL.md). It contains:
 | [moonpay](./wallets/moonpay.md) | Solana | x402 |
 | [pay.sh](./wallets/pay-sh.md) | Solana | x402 |
 
-## Install / use the skill
+## Per-wallet doc shape
 
-This is an [agentskills.io](https://agentskills.io/specification)-style skill — a folder with `SKILL.md` at the root. There are four common ways to install it:
-
-### 1. Direct fetch (zero-install)
-
-Have your agent `curl` the skill at request time:
-
-```bash
-curl https://raw.githubusercontent.com/0xsnackbaker/agentic-wallets-skills/main/SKILL.md
-```
-
-Then fetch individual wallet docs as needed:
-
-```bash
-curl https://raw.githubusercontent.com/0xsnackbaker/agentic-wallets-skills/main/bankr.md
-```
-
-### 2. Claude Code skill
-
-Drop the repo into your Claude Code skills folder:
-
-```bash
-git clone https://github.com/0xsnackbaker/agentic-wallets-skills.git \
-  ~/.claude/skills/agentic-wallets
-```
-
-Claude Code picks up `SKILL.md` automatically and the docs become invokable.
-
-### 3. Git submodule
-
-Pin to a specific commit in your own repo:
-
-```bash
-git submodule add https://github.com/0xsnackbaker/agentic-wallets-skills.git skills/agentic-wallets
-git submodule update --init
-```
-
-### 4. Reference from another skill
-
-Cross-link from your own SKILL.md to this one:
-
-```markdown
-> Need to send a paid HTTP request? See the agentic-wallets skill at
-> https://raw.githubusercontent.com/0xsnackbaker/agentic-wallets-skills/main/SKILL.md
-```
-
-## Skill shape
-
-Each per-wallet doc follows a uniform structure so agents can parse them consistently:
+Each wallet doc follows a uniform structure so agents can parse them consistently:
 
 ```
 ---
