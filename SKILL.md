@@ -106,3 +106,22 @@ Fetchable directly when this skill is hosted:
 ```bash
 curl https://<host>/agentic-wallets/wallets/<wallet>.md
 ```
+
+Hosted reference at `molty.cash`:
+
+```bash
+curl https://molty.cash/skills/agentic-wallets/SKILL.md           # this catalog
+curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md # any per-wallet doc
+```
+
+## Pairing with an endpoint-side spec
+
+This catalog is **wallet-side only**. The paid endpoint you're calling typically ships its own skill that defines the URL, request body, fees, and any cap math. The agent's job is to combine the two.
+
+Reference example — [moltycash PAYMENT.md](https://molty.cash/skills/PAYMENT.md) is the endpoint-side spec for `api.molty.cash` (tip / hire / gig). It documents:
+
+- the endpoint URLs (per-user `a2a`, global `a2a`)
+- the JSON-RPC payloads
+- the fee schedule (1¢ flat under $1, 3% over)
+
+Other paid endpoints publish their own equivalents. The pattern is the same regardless of vendor: fetch the endpoint's spec, fetch the chosen wallet's doc from this catalog, combine.
