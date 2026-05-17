@@ -37,7 +37,7 @@ If the human asks you to **scan their system** to find what's installed, run the
    curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
    ```
    `<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`. Each doc gives the exact CLI invocation pattern for that wallet's x402 or MPP transport.
-4. **Combine wallet transport + endpoint payload.** The wallet doc tells you *how to send* (signing, headers, options). The paid endpoint's own spec tells you *what to send* (URL, request body, fee structure for any per-call payment cap). The [worked example](#worked-example--calling-a-paid-endpoint-via-purl) below shows the pattern with moltycash as the endpoint.
+4. **Combine wallet transport + endpoint payload.** The wallet doc tells you *how to send* (signing, headers, options). The paid endpoint's own spec tells you *what to send* (URL, request body, fee structure for any per-call payment cap). See [Invocation pattern](#invocation-pattern) below for the two transport flavours.
 
 If no catalog wallet works for the human, every per-wallet doc carries a one-line `## Install` hint with the canonical package + docs link — offer a short menu of install options instead of guessing.
 
@@ -79,37 +79,23 @@ Each per-wallet doc carries the authoritative `Protocols & chains` list and `Ins
 | moonpay | Solana | x402 | `moonpay user retrieve` (or `moonpay wallet list`) | `moonpay --json token balance list --wallet <name> --chain solana` + `jq '.items[] \| select(.symbol=="USDC") \| .balance.amount'` | `npm i -g @moonpay/cli` | [./moonpay.md](./wallets/moonpay.md) |
 | pay.sh | Solana | x402 | `npx @solana/pay account list` | same call — USDC shown directly | none — `npx @solana/pay` | [./pay-sh.md](./wallets/pay-sh.md) |
 
-## Worked example — calling a paid endpoint via `purl`
+## Invocation pattern
 
-This catalog tells you how to *use* a wallet. The paid endpoint you're calling tells you *what to send*:
+The catalog gives you the wallet; the endpoint you're calling gives you the URL, body, and fee schedule. Two flavours of invocation cover all 10 CLIs in this catalog:
 
-- the endpoint URL
-- the request body (e.g. JSON-RPC payload)
-- the fee structure (needed for wallets like `bankr` that take a per-call `--max-payment` cap — pass `amount + fee + headroom`)
-
-Concrete example: moltycash (the public tip / hire / gig network at `api.molty.cash`) publishes those details at [`https://molty.cash/skills/PAYMENT.md`](https://molty.cash/skills/PAYMENT.md). Fetching it gives you:
-
-- **Endpoints** — `POST https://api.molty.cash/{username}/a2a` for tip/hire, `POST https://api.molty.cash/a2a` for `gig.create`
-- **Payloads** — JSON-RPC 2.0, e.g. `{"jsonrpc":"2.0","id":1,"method":"tip","params":{"amount":0.50}}`
-- **Fees** — flat **1¢** on payments under $1, **3%** on payments ≥ $1
-
-Plug those into `purl` (which auto-detects x402 vs MPP per call):
+**Auto-detect style** (e.g. `purl` — picks x402 vs MPP per call):
 
 ```bash
-# Tip 0xmesuthere 50¢ (total cost: 50¢ tip + 1¢ flat fee = 51¢)
-purl https://api.molty.cash/0xmesuthere/a2a -X POST \
-  --json '{"jsonrpc":"2.0","id":1,"method":"tip","params":{"amount":0.50}}'
+purl <endpoint-url> -X POST --json '<request body>'
 ```
 
-Same call with `bankr` — note the explicit cap that includes the fee + headroom:
+**Explicit-cap style** (e.g. `bankr` — you pass `--max-payment` set to `payment_amount + fee + headroom`):
 
 ```bash
-bankr x402 call https://api.molty.cash/0xmesuthere/a2a \
-  --method POST --max-payment 0.60 \
-  --body '{"jsonrpc":"2.0","id":1,"method":"tip","params":{"amount":0.50}}'
+bankr x402 call <endpoint-url> --method POST --max-payment <cap> --body '<request body>'
 ```
 
-Each per-wallet doc carries the equivalent invocation for the other CLIs in the catalog. **Any other paid HTTP endpoint follows the same pattern** — read its own payment spec for URL + body + fees, then plug those into any catalog wallet's transport.
+Every per-wallet doc's `## Transport` section has the exact form for that CLI. Pick the wallet, copy its transport line, substitute the endpoint's URL + body + (if needed) cap.
 
 ## Per-wallet docs
 
