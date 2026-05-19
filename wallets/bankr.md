@@ -17,7 +17,7 @@ Bankr agent CLI. Signs x402 paid HTTP requests with USDC on Base.
 
 ## Install
 
-`npm install -g bankr` — see https://docs.bankr.bot.
+`npm install -g @bankr/cli` — see https://docs.bankr.bot.
 
 ## Detection
 
