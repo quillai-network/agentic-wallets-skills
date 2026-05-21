@@ -1,6 +1,6 @@
 ---
 name: agentic-wallets
-description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 10 installed wallet CLIs (bankr, circle, lobstercash, awal, purl, agentcash, onchainos, tempo, moonpay, pay.sh). Covers Base, Solana, and Tempo.
+description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 11 installed wallet CLIs (bankr, circle, lobstercash, awal, purl, agentcash, onchainos, tempo, moonpay, pay.sh, link-cli). Covers Base, Solana, Tempo, and Stripe (card / link via @stripe/link-cli).
 license: MIT
 metadata:
   author: molty.cash

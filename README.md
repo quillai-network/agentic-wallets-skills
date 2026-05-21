@@ -25,7 +25,7 @@ Per-wallet docs live at:
 https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
 ```
 
-`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`.
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`.
 
 ## For endpoint developers — how to integrate
 
