@@ -9,7 +9,7 @@ The skill is **wallet-side only**. It tells an AI agent how to detect, pick, and
 The pattern is two skills in tandem:
 
 1. **Your endpoint skill** — what your service is, the URLs, request/response shape, fee schedule, anything vendor-specific
-2. **This catalog** (`agentic-wallets/SKILL.md`) — how to drive any of the 10 wallet CLIs
+2. **This catalog** (`agentic-wallets/SKILL.md`) — how to drive any of the 11 wallet CLIs
 
 An AI agent reading your endpoint spec follows the link to this catalog, picks a wallet with the human's input, and combines both to make the paid request.
 
@@ -114,6 +114,7 @@ git submodule update --init
 | [tempo](./wallets/tempo.md) | Tempo | MPP |
 | [moonpay](./wallets/moonpay.md) | Solana | x402 |
 | [pay.sh](./wallets/pay-sh.md) | Solana | x402 |
+| [link-cli](./wallets/link-cli.md) | Stripe (fiat USD via card / link) | MPP |
 
 ## Per-wallet doc shape
 
