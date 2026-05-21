@@ -14,7 +14,7 @@ A catalog of wallet CLIs that can sign **x402** (HTTP 402) or **MPP** (Multi-Pro
 ## Protocols & chains supported
 
 - **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`)
-- **MPP**: Tempo (`eip155:4217`)
+- **MPP**: Tempo (`eip155:4217`), Stripe (card / link — fiat USD, human-in-the-loop)
 
 ## How to use
 
@@ -38,7 +38,7 @@ The paid endpoint's 402 response lists accepted chains in `accepts[].network`. T
 curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
 ```
 
-`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport.
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `stripe`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport (or, for `stripe`, the human-in-the-loop hosted-checkout pattern).
 
 ### 4. Combine wallet transport + endpoint payload
 
@@ -81,6 +81,7 @@ The probe is best-effort. Some wallets (onchainos) are signer-only and have no n
 | tempo | Tempo | MPP | `tempo wallet whoami` | `tempo wallet whoami` (filter to USDC line) | Tempo CLI + `tempo add request` | [./tempo.md](./wallets/tempo.md) |
 | moonpay | Solana | x402 | `moonpay user retrieve` (or `moonpay wallet list`) | `moonpay --json token balance list --wallet <name> --chain solana` + `jq '.items[] \| select(.symbol=="USDC") \| .balance.amount'` | `npm i -g @moonpay/cli` | [./moonpay.md](./wallets/moonpay.md) |
 | pay.sh | Solana | x402 | `npx @solana/pay account list` | same call — USDC shown directly | none — `npx @solana/pay` | [./pay-sh.md](./wallets/pay-sh.md) |
+| stripe | Fiat USD (card / link) | MPP (human-in-the-loop) | n/a — no agent CLI; human holds the card | n/a — fiat | none — hosted by the merchant | [./stripe.md](./wallets/stripe.md) |
 
 ---
 
