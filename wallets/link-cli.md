@@ -1,13 +1,13 @@
 ---
-name: wallet-stripe
+name: wallet-link-cli
 description: Stripe Link CLI — fiat USD (card / Link) paid HTTP transport via MPP. Agent mints a one-time Shared Payment Token from the human's pre-authed Link wallet, then pays.
 license: MIT
 metadata:
   author: molty.cash
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
-# stripe
+# link-cli
 
 The Stripe [Link CLI](https://github.com/stripe/link-cli) lets agents charge a card the human pre-saved in their [Link](https://link.com) wallet — no card numbers ever touch the agent. The CLI mints a one-time-use Shared Payment Token (SPT) and signs the MPP request with it. US Link accounts only at the moment.
 
