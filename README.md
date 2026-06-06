@@ -1,15 +1,15 @@
 # agentic-wallets-skills
 
-A **template skill** for x402 / MPP paid-endpoint developers. Reference this catalog from your own endpoint spec so AI agents calling your service can pay you with any of 10 installed wallet CLIs — no per-endpoint integration of 10 different wallet SDKs required.
+A **template skill** for x402 / MPP paid-endpoint developers. Reference this catalog from your own endpoint spec so AI agents calling your service can pay you with any of 12 installed wallet CLIs — no per-endpoint integration of 12 different wallet SDKs required.
 
-The skill is **wallet-side only**. It tells an AI agent how to detect, pick, and invoke any of the 10 supported wallet CLIs. Your endpoint-side spec — URLs, request bodies, fees, cap math — lives in your own skill file.
+The skill is **wallet-side only**. It tells an AI agent how to detect, pick, and invoke any of the 12 supported wallet CLIs. Your endpoint-side spec — URLs, request bodies, fees, cap math — lives in your own skill file.
 
 ## How it works
 
 The pattern is two skills in tandem:
 
 1. **Your endpoint skill** — what your service is, the URLs, request/response shape, fee schedule, anything vendor-specific
-2. **This catalog** (`agentic-wallets/SKILL.md`) — how to drive any of the 11 wallet CLIs
+2. **This catalog** (`agentic-wallets/SKILL.md`) — how to drive any of the 12 wallet CLIs
 
 An AI agent reading your endpoint spec follows the link to this catalog, picks a wallet with the human's input, and combines both to make the paid request.
 
@@ -25,7 +25,7 @@ Per-wallet docs live at:
 https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
 ```
 
-`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`.
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `solid`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`.
 
 ## For endpoint developers — how to integrate
 
@@ -47,7 +47,7 @@ Combine the wallet's transport pattern with this endpoint's URL + body
 + fee structure (below).
 ```
 
-That's it. Your endpoint spec stays focused on what's unique to your service. The wallet-side complexity (10 different CLIs × x402 vs MPP × multiple chains) is delegated to this catalog.
+That's it. Your endpoint spec stays focused on what's unique to your service. The wallet-side complexity (12 different CLIs × x402 vs MPP × multiple chains) is delegated to this catalog.
 
 ### Reference example
 
@@ -107,6 +107,7 @@ git submodule update --init
 | [bankr](./wallets/bankr.md) | Base | x402 |
 | [circle](./wallets/circle.md) | Base | x402 |
 | [lobstercash](./wallets/lobstercash.md) | Base | x402 |
+| [solid](./wallets/solid.md) | Base | x402 |
 | [awal](./wallets/awal.md) | Base, Solana | x402 |
 | [purl](./wallets/purl.md) | Base, Solana, Tempo | x402, MPP |
 | [agentcash](./wallets/agentcash.md) | Base, Solana, Tempo | x402, MPP |

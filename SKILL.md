@@ -1,6 +1,6 @@
 ---
 name: agentic-wallets
-description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 11 installed wallet CLIs (bankr, circle, lobstercash, awal, purl, agentcash, onchainos, tempo, moonpay, pay.sh, link-cli). Covers Base, Solana, Tempo, and Stripe (card / link via @stripe/link-cli).
+description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 12 installed wallet CLIs (bankr, circle, lobstercash, solid, awal, purl, agentcash, onchainos, tempo, moonpay, pay.sh, link-cli). Covers Base, Solana, Tempo, and Stripe (card / link via @stripe/link-cli).
 license: MIT
 metadata:
   author: molty.cash
@@ -38,7 +38,7 @@ The paid endpoint's 402 response lists accepted chains in `accepts[].network`. T
 curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
 ```
 
-`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport.
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `solid`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport.
 
 ### 4. Combine wallet transport + endpoint payload
 
@@ -55,6 +55,7 @@ detect_wallets() {
   command -v bankr        >/dev/null && bankr whoami 2>/dev/null         && echo "✓ bankr authed"
   command -v circle       >/dev/null && circle wallet list --type agent --chain BASE --output json 2>/dev/null | head -1 && echo "✓ circle authed"
   command -v lobstercash  >/dev/null && lobstercash status 2>/dev/null   && echo "✓ lobstercash status above"
+  command -v solid        >/dev/null && solid whoami 2>/dev/null         && echo "✓ solid authed"
   command -v purl         >/dev/null && purl wallet list 2>/dev/null     && echo "✓ purl authed"
   command -v tempo        >/dev/null && tempo wallet whoami 2>/dev/null  && echo "✓ tempo authed"
   command -v onchainos    >/dev/null && echo "✓ onchainos installed (signer-only; check balance via OKX dashboard)"
@@ -75,6 +76,7 @@ The probe is best-effort. Some wallets (onchainos) are signer-only and have no n
 | bankr | Base | x402 | `bankr whoami` | `bankr wallet portfolio --chain base --json` + `jq` USDC filter | `npm i -g bankr` | [./bankr.md](./wallets/bankr.md) |
 | circle | Base | x402 | `circle wallet list --type agent --chain BASE --output json` | off-CLI — Base RPC for USDC contract | `npm i -g @circle-fin/cli` | [./circle.md](./wallets/circle.md) |
 | lobstercash | Base | x402 | `lobstercash status` | parse `Balance: ... usdc` from `lobstercash status` | `npm i -g lobstercash` | [./lobstercash.md](./wallets/lobstercash.md) |
+| solid | Base | x402 | `solid whoami` | `solid balance` (USDC shown directly; `--json` + `jq .usdc`) | `npm i -g @solid-money/cli` | [./solid.md](./wallets/solid.md) |
 | awal | Base, Solana | x402 | `awal status` | `awal balance` (filter to USDC line) | none — `npx awal@latest` | [./awal.md](./wallets/awal.md) |
 | purl | Base, Solana, Tempo | x402 (Base, Solana), MPP (Tempo) | `purl wallet list` | `purl balance` (filter to USDC line) | see purl docs | [./purl.md](./wallets/purl.md) |
 | agentcash | Base, Solana, Tempo | x402 (Base, Solana), MPP (Tempo) | `npx agentcash@latest accounts` | `npx agentcash@latest balance` (filter to USDC line) | none — `npx agentcash@latest` | [./agentcash.md](./wallets/agentcash.md) |
