@@ -1,6 +1,6 @@
 ---
 name: agentic-wallets
-description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 12 installed wallet CLIs (bankr, circle, lobstercash, solid, awal, purl, agentcash, onchainos, tempo, moonpay, pay.sh, link-cli). Covers Base, Solana, Tempo, and Stripe (card / link via @stripe/link-cli).
+description: Pay any x402 (HTTP 402) or MPP (Multi-Provider Payments) HTTP endpoint by using one of 13 installed wallet CLIs (bankr, circle, lobstercash, solid, awal, purl, agentcash, clawcash-cli, onchainos, tempo, moonpay, pay.sh, link-cli). Covers Base, Solana, Tempo, SKALE Base, and Stripe (card / link via @stripe/link-cli).
 license: MIT
 metadata:
   author: molty.cash
@@ -13,8 +13,8 @@ A catalog of wallet CLIs that can sign **x402** (HTTP 402) or **MPP** (Multi-Pro
 
 ## Protocols & chains supported
 
-- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`)
-- **MPP**: Tempo (`eip155:4217`), Stripe (card / link — fiat USD, via `@stripe/link-cli`)
+- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`), SKALE Base (`skale-base`)
+- **MPP**: Tempo (`eip155:4217`), SKALE Base (`skale-base`), Stripe (card / link — fiat USD, via `@stripe/link-cli`)
 
 ## How to use
 
@@ -38,7 +38,7 @@ The paid endpoint's 402 response lists accepted chains in `accepts[].network`. T
 curl https://molty.cash/skills/agentic-wallets/wallets/<wallet>.md
 ```
 
-`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `solid`, `awal`, `purl`, `agentcash`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport.
+`<wallet>` ∈ `bankr`, `circle`, `lobstercash`, `solid`, `awal`, `purl`, `agentcash`, `clawcash-cli`, `onchainos`, `tempo`, `moonpay`, `pay-sh`, `link-cli`. Each doc has the exact CLI invocation pattern for that wallet's x402 or MPP transport.
 
 ### 4. Combine wallet transport + endpoint payload
 
@@ -62,6 +62,7 @@ detect_wallets() {
   command -v moonpay      >/dev/null && moonpay wallet list 2>/dev/null  && echo "✓ moonpay wallets listed above"
   npx --no-install awal status 2>/dev/null      && echo "✓ awal authed"
   npx --no-install agentcash accounts 2>/dev/null && echo "✓ agentcash authed"
+  npx --no-install @clawcash/cli@latest check-credit 2>/dev/null && echo "✓ clawcash-cli authed"
   npx --no-install @solana/pay account list 2>/dev/null && echo "✓ pay.sh authed (balance shown above)"
   command -v link-cli     >/dev/null && link-cli auth status 2>/dev/null  && echo "✓ link-cli authed"
 }
@@ -80,6 +81,7 @@ The probe is best-effort. Some wallets (onchainos) are signer-only and have no n
 | awal | Base, Solana | x402 | `awal status` | `awal balance` (filter to USDC line) | none — `npx awal@latest` | [./awal.md](./wallets/awal.md) |
 | purl | Base, Solana, Tempo | x402 (Base, Solana), MPP (Tempo) | `purl wallet list` | `purl balance` (filter to USDC line) | see purl docs | [./purl.md](./wallets/purl.md) |
 | agentcash | Base, Solana, Tempo | x402 (Base, Solana), MPP (Tempo) | `npx agentcash@latest accounts` | `npx agentcash@latest balance` (filter to USDC line) | none — `npx agentcash@latest` | [./agentcash.md](./wallets/agentcash.md) |
+| clawcash-cli | Base, SKALE Base | x402 (Base, SKALE Base), MPP (SKALE Base) | `npx @clawcash/cli@latest check-credit` | credit line via `npx @clawcash/cli@latest check-credit` | none — `npx @clawcash/cli@latest` | [./clawcash-cli.md](./wallets/clawcash-cli.md) |
 | onchainos | Base | x402 (signer-only) | `onchainos --help` (install check) | off-CLI — Base RPC for USDC contract | `npm i -g onchainos` | [./onchainos.md](./wallets/onchainos.md) |
 | tempo | Tempo | MPP | `tempo wallet whoami` | `tempo wallet whoami` (filter to USDC line) | Tempo CLI + `tempo add request` | [./tempo.md](./wallets/tempo.md) |
 | moonpay | Solana | x402 | `moonpay user retrieve` (or `moonpay wallet list`) | `moonpay --json token balance list --wallet <name> --chain solana` + `jq '.items[] \| select(.symbol=="USDC") \| .balance.amount'` | `npm i -g @moonpay/cli` | [./moonpay.md](./wallets/moonpay.md) |
