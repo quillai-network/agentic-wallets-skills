@@ -14,8 +14,8 @@ Credit-funded x402 proxy CLI for agents. ClawCash pays approved x402 / MPP endpo
 ## Protocols & chains
 
 - **x402** — Base (`eip155:8453`)
-- **x402** — SKALE Base (`skale-base`)
-- **MPP** — SKALE Base (`skale-base`)
+- **x402** — SKALE Base (`eip155:1187947933`)
+- **MPP** — SKALE Base (`eip155:1187947933`)
 
 ## Install
 
@@ -43,6 +43,7 @@ npx @clawcash/cli@latest fetch <url> \
 ```
 
 `--payment-network` is optional. If omitted, ClawCash discovers the target's accepted payment metadata and chooses a supported route.
+Use the CAIP-2 network IDs above when matching an endpoint's `accepts[].network`; the CLI also accepts user-facing aliases such as `base` and `skale-base` for `--payment-network`.
 
 ## Example — pay an x402 endpoint on credit
 

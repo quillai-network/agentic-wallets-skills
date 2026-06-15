@@ -13,8 +13,8 @@ A catalog of wallet CLIs that can sign **x402** (HTTP 402) or **MPP** (Multi-Pro
 
 ## Protocols & chains supported
 
-- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`), SKALE Base (`skale-base`)
-- **MPP**: Tempo (`eip155:4217`), SKALE Base (`skale-base`), Stripe (card / link — fiat USD, via `@stripe/link-cli`)
+- **x402**: Base (`eip155:8453`), Solana (`solana:5eykt4...`), SKALE Base (`eip155:1187947933`)
+- **MPP**: Tempo (`eip155:4217`), SKALE Base (`eip155:1187947933`), Stripe (card / link — fiat USD, via `@stripe/link-cli`)
 
 ## How to use
 
